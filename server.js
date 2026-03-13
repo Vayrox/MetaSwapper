@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 const { exiftool } = require("exiftool-vendored");
+const archiver = require("archiver");
 const { buildIPhone16ProMetadata } = require("./iphone16pro-template");
 
 const app = express();
@@ -120,6 +121,30 @@ app.get("/api/download/:id", (req, res) => {
   if (!fs.existsSync(filePath)) return res.status(404).json({ error: "File missing" });
 
   res.download(filePath, job.originalName);
+});
+
+// Download all processed files as a zip
+app.get("/api/download-all", (req, res) => {
+  const doneJobs = [...jobs.values()].filter((j) => j.status === "done");
+  if (doneJobs.length === 0) {
+    return res.status(400).json({ error: "No processed files to download" });
+  }
+
+  res.setHeader("Content-Type", "application/zip");
+  res.setHeader("Content-Disposition", "attachment; filename=MetaSwapper-photos.zip");
+
+  const archive = archiver("zip", { zlib: { level: 5 } });
+  archive.on("error", (err) => res.status(500).json({ error: err.message }));
+  archive.pipe(res);
+
+  for (const job of doneJobs) {
+    const filePath = path.join(PROCESSED_DIR, job.filename);
+    if (fs.existsSync(filePath)) {
+      archive.file(filePath, { name: job.originalName });
+    }
+  }
+
+  archive.finalize();
 });
 
 // Delete a job and its files

@@ -323,6 +323,7 @@
   <!-- Queue -->
   <div class="section-title">
     Queue <span class="count" id="queueCount">0</span>
+    <button class="btn primary" id="downloadAllBtn" style="margin-left:auto;display:none" onclick="downloadAll()">Download All</button>
   </div>
   <div class="queue" id="queueList">
     <div class="empty-state" id="emptyState">No photos in queue. Upload some to get started.</div>
@@ -348,6 +349,7 @@
 </div>
 
 <script>
+const downloadAllBtn = document.getElementById("downloadAllBtn");
 const dropZone = document.getElementById("dropZone");
 const fileInput = document.getElementById("fileInput");
 const queueList = document.getElementById("queueList");
@@ -415,6 +417,10 @@ function renderQueue() {
     return;
   }
 
+  // Show/hide Download All button
+  const doneCount = allJobs.filter((j) => j.status === "done").length;
+  downloadAllBtn.style.display = doneCount >= 2 ? "" : "none";
+
   queueList.innerHTML = allJobs.map((j) => `
     <div class="queue-item">
       <div class="info">
@@ -431,6 +437,10 @@ function renderQueue() {
       </div>
     </div>
   `).join("");
+}
+
+function downloadAll() {
+  window.open("/api/download-all", "_blank");
 }
 
 async function download(id) {
