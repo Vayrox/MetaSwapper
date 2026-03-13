@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MetaSwapper – iPhone 16 Pro</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'" />
   <style>
     :root {
       --bg: #0a0a0f;
@@ -25,19 +26,21 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
+      user-select: none;
     }
 
     /* Header */
     .header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 20px 32px;
+      padding: 16px 24px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
+      -webkit-app-region: drag;
     }
     .header h1 {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 700;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       -webkit-background-clip: text;
@@ -46,56 +49,55 @@
     .header .badge {
       background: var(--surface2);
       border: 1px solid var(--border);
-      padding: 4px 10px;
+      padding: 3px 10px;
       border-radius: 20px;
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text2);
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 1000px;
       margin: 0 auto;
-      padding: 32px 24px;
+      padding: 24px 20px;
     }
 
     /* Upload zone */
     .upload-zone {
       border: 2px dashed var(--border);
       border-radius: var(--radius);
-      padding: 48px;
+      padding: 40px;
       text-align: center;
       cursor: pointer;
       transition: all 0.2s;
       background: var(--surface);
-      position: relative;
     }
     .upload-zone:hover, .upload-zone.dragover {
       border-color: var(--accent);
       background: rgba(108, 92, 231, 0.05);
     }
-    .upload-zone h2 { font-size: 18px; margin-bottom: 8px; }
-    .upload-zone p { color: var(--text2); font-size: 14px; }
-    .upload-zone input { display: none; }
+    .upload-zone h2 { font-size: 17px; margin-bottom: 6px; }
+    .upload-zone p { color: var(--text2); font-size: 13px; }
     .upload-btn {
       display: inline-block;
-      margin-top: 16px;
-      padding: 10px 28px;
+      margin-top: 14px;
+      padding: 9px 24px;
       background: var(--accent);
       color: #fff;
       border: none;
       border-radius: 8px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s;
+      -webkit-app-region: no-drag;
     }
     .upload-btn:hover { background: #5a4bd1; }
 
     /* Section titles */
     .section-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
-      margin: 32px 0 16px;
+      margin: 24px 0 12px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -105,38 +107,38 @@
       border: 1px solid var(--border);
       padding: 2px 8px;
       border-radius: 12px;
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text2);
     }
 
     /* Queue list */
-    .queue { display: flex; flex-direction: column; gap: 8px; }
+    .queue { display: flex; flex-direction: column; gap: 6px; }
     .queue-item {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 16px 20px;
+      padding: 14px 18px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       transition: border-color 0.2s;
     }
     .queue-item:hover { border-color: var(--accent); }
     .queue-item .info { flex: 1; min-width: 0; }
     .queue-item .name {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .queue-item .time { font-size: 12px; color: var(--text2); margin-top: 2px; }
+    .queue-item .time { font-size: 11px; color: var(--text2); margin-top: 2px; }
 
     /* Status badges */
     .status {
-      padding: 4px 12px;
+      padding: 3px 10px;
       border-radius: 20px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -148,14 +150,14 @@
     .status.error { background: rgba(255,107,107,0.15); color: var(--red); }
 
     /* Action buttons */
-    .actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .actions { display: flex; gap: 6px; flex-shrink: 0; }
     .btn {
-      padding: 6px 14px;
+      padding: 5px 12px;
       border-radius: 6px;
       border: 1px solid var(--border);
       background: var(--surface2);
       color: var(--text);
-      font-size: 12px;
+      font-size: 11px;
       cursor: pointer;
       transition: all 0.15s;
       font-weight: 500;
@@ -178,7 +180,7 @@
       align-items: center;
       justify-content: center;
       z-index: 1000;
-      padding: 24px;
+      padding: 20px;
     }
     .modal-overlay.open { display: flex; }
     .modal {
@@ -186,31 +188,31 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       width: 100%;
-      max-width: 900px;
-      max-height: 85vh;
+      max-width: 880px;
+      max-height: 80vh;
       overflow: hidden;
       display: flex;
       flex-direction: column;
     }
     .modal-header {
-      padding: 20px 24px;
+      padding: 16px 20px;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .modal-header h3 { font-size: 16px; }
+    .modal-header h3 { font-size: 15px; }
     .modal-close {
       background: none;
       border: none;
       color: var(--text2);
-      font-size: 20px;
+      font-size: 18px;
       cursor: pointer;
       padding: 4px 8px;
     }
     .modal-close:hover { color: var(--text); }
     .modal-body {
-      padding: 24px;
+      padding: 20px;
       overflow-y: auto;
       flex: 1;
     }
@@ -219,20 +221,20 @@
     .meta-tabs {
       display: flex;
       gap: 4px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       background: var(--surface2);
       border-radius: 8px;
-      padding: 4px;
+      padding: 3px;
     }
     .meta-tab {
       flex: 1;
-      padding: 8px 16px;
+      padding: 7px 14px;
       text-align: center;
       border-radius: 6px;
       border: none;
       background: transparent;
       color: var(--text2);
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.15s;
@@ -244,11 +246,11 @@
     .meta-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 13px;
+      font-size: 12px;
     }
     .meta-table th,
     .meta-table td {
-      padding: 8px 12px;
+      padding: 6px 10px;
       text-align: left;
       border-bottom: 1px solid var(--border);
     }
@@ -268,7 +270,7 @@
     .meta-side-by-side {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 12px;
     }
     .meta-panel {
       border: 1px solid var(--border);
@@ -276,31 +278,24 @@
       overflow: hidden;
     }
     .meta-panel-header {
-      padding: 10px 14px;
+      padding: 8px 12px;
       background: var(--surface2);
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       border-bottom: 1px solid var(--border);
     }
     .meta-panel-header.original { color: var(--red); }
     .meta-panel-header.swapped { color: var(--green); }
     .meta-panel-body {
-      max-height: 400px;
+      max-height: 380px;
       overflow-y: auto;
     }
 
     .empty-state {
       text-align: center;
-      padding: 48px;
+      padding: 40px;
       color: var(--text2);
-      font-size: 14px;
-    }
-
-    /* Responsive */
-    @media (max-width: 640px) {
-      .meta-side-by-side { grid-template-columns: 1fr; }
-      .queue-item { flex-wrap: wrap; }
-      .actions { width: 100%; justify-content: flex-end; }
+      font-size: 13px;
     }
   </style>
 </head>
@@ -315,18 +310,17 @@
   <!-- Upload -->
   <div class="upload-zone" id="dropZone">
     <h2>Drop photos here</h2>
-    <p>or click to browse &middot; JPG, PNG, HEIC, TIFF, WebP &middot; up to 50MB each</p>
-    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">Select Files</button>
-    <input type="file" id="fileInput" multiple accept="image/*" />
+    <p>or click to browse — JPG, PNG, HEIC, TIFF, WebP</p>
+    <button class="upload-btn" id="browseBtn">Select Files</button>
   </div>
 
   <!-- Queue -->
   <div class="section-title">
     Queue <span class="count" id="queueCount">0</span>
-    <button class="btn primary" id="downloadAllBtn" style="margin-left:auto;display:none" onclick="downloadAll()">Download All</button>
+    <button class="btn primary" id="downloadAllBtn" style="margin-left:auto;display:none" onclick="saveAll()">Save All (.zip)</button>
   </div>
   <div class="queue" id="queueList">
-    <div class="empty-state" id="emptyState">No photos in queue. Upload some to get started.</div>
+    <div class="empty-state" id="emptyState">No photos in queue. Drop files or click Select Files.</div>
   </div>
 </div>
 
@@ -351,7 +345,7 @@
 <script>
 const downloadAllBtn = document.getElementById("downloadAllBtn");
 const dropZone = document.getElementById("dropZone");
-const fileInput = document.getElementById("fileInput");
+const browseBtn = document.getElementById("browseBtn");
 const queueList = document.getElementById("queueList");
 const queueCount = document.getElementById("queueCount");
 const emptyState = document.getElementById("emptyState");
@@ -362,64 +356,67 @@ const metaContent = document.getElementById("metaContent");
 let allJobs = [];
 let pollTimer = null;
 
-// Drag & drop
-dropZone.addEventListener("dragover", (e) => { e.preventDefault(); dropZone.classList.add("dragover"); });
-dropZone.addEventListener("dragleave", () => dropZone.classList.remove("dragover"));
-dropZone.addEventListener("drop", (e) => {
-  e.preventDefault();
-  dropZone.classList.remove("dragover");
-  if (e.dataTransfer.files.length) uploadFiles(e.dataTransfer.files);
-});
-fileInput.addEventListener("change", () => {
-  if (fileInput.files.length) uploadFiles(fileInput.files);
-  fileInput.value = "";
+// Browse button — native file dialog
+browseBtn.addEventListener("click", async (e) => {
+  e.stopPropagation();
+  await window.api.pickFiles();
+  startPolling();
 });
 
-async function uploadFiles(files) {
-  const fd = new FormData();
-  for (const f of files) fd.append("photos", f);
-  try {
-    const res = await fetch("/api/upload", { method: "POST", body: fd });
-    if (!res.ok) throw new Error(await res.text());
-    startPolling();
-  } catch (err) {
-    alert("Upload failed: " + err.message);
+// Drag & drop — pass file paths directly
+dropZone.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  dropZone.classList.add("dragover");
+});
+dropZone.addEventListener("dragleave", (e) => {
+  e.preventDefault();
+  dropZone.classList.remove("dragover");
+});
+dropZone.addEventListener("drop", async (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  dropZone.classList.remove("dragover");
+  const paths = [];
+  for (const f of e.dataTransfer.files) {
+    if (f.path) paths.push(f.path);
   }
-}
+  if (paths.length > 0) {
+    await window.api.addFiles(paths);
+    startPolling();
+  }
+});
 
 function startPolling() {
   if (pollTimer) return;
   refreshQueue();
-  pollTimer = setInterval(refreshQueue, 1500);
+  pollTimer = setInterval(refreshQueue, 1000);
 }
 
 async function refreshQueue() {
   try {
-    const res = await fetch("/api/queue");
-    const data = await res.json();
-    allJobs = data.jobs;
+    allJobs = await window.api.getQueue();
     renderQueue();
 
-    // Stop polling if nothing is in progress
     const active = allJobs.some((j) => j.status === "queued" || j.status === "processing");
     if (!active && pollTimer) {
       clearInterval(pollTimer);
       pollTimer = null;
     }
-  } catch (e) { /* ignore transient errors */ }
+  } catch (e) { /* ignore */ }
 }
 
 function renderQueue() {
   queueCount.textContent = allJobs.length;
+
+  const doneCount = allJobs.filter((j) => j.status === "done").length;
+  downloadAllBtn.style.display = doneCount >= 2 ? "" : "none";
+
   if (allJobs.length === 0) {
     queueList.innerHTML = '';
     queueList.appendChild(emptyState);
     return;
   }
-
-  // Show/hide Download All button
-  const doneCount = allJobs.filter((j) => j.status === "done").length;
-  downloadAllBtn.style.display = doneCount >= 2 ? "" : "none";
 
   queueList.innerHTML = allJobs.map((j) => `
     <div class="queue-item">
@@ -431,7 +428,7 @@ function renderQueue() {
       <div class="actions">
         ${j.status === "done" ? `
           <button class="btn" onclick="viewMeta('${j.id}')">Metadata</button>
-          <button class="btn primary" onclick="download('${j.id}')">Download</button>
+          <button class="btn primary" onclick="saveFile('${j.id}')">Save</button>
         ` : ""}
         <button class="btn danger" onclick="deleteJob('${j.id}')">&times;</button>
       </div>
@@ -439,16 +436,16 @@ function renderQueue() {
   `).join("");
 }
 
-function downloadAll() {
-  window.open("/api/download-all", "_blank");
+async function saveFile(id) {
+  await window.api.saveFile(id);
 }
 
-async function download(id) {
-  window.open(`/api/download/${encodeURIComponent(id)}`, "_blank");
+async function saveAll() {
+  await window.api.saveAll();
 }
 
 async function deleteJob(id) {
-  await fetch(`/api/job/${encodeURIComponent(id)}`, { method: "DELETE" });
+  await window.api.deleteJob(id);
   refreshQueue();
 }
 
@@ -456,8 +453,8 @@ async function deleteJob(id) {
 let currentMeta = { original: null, swapped: null };
 
 async function viewMeta(id) {
-  const res = await fetch(`/api/job/${encodeURIComponent(id)}`);
-  const job = await res.json();
+  const job = await window.api.getJob(id);
+  if (!job) return;
   currentMeta.original = job.originalMeta || {};
   currentMeta.swapped = job.newMeta || {};
   modalTitle.textContent = `Metadata – ${job.originalName}`;
